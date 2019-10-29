@@ -1,0 +1,55 @@
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.naive_bayes import GaussianNB
+from sklearn.metrics import confusion_matrix
+from sklearn.model_selection import train_test_split
+#MAKE POINT
+x1=np.random.normal(0,1,500)
+y1=np.random.normal(0,1,500)
+x2=np.random.normal(1,1,500)
+y2=np.random.normal(4,1.5,500)
+x3=np.random.normal(8,2,500)
+y3=np.random.normal(5,1,500)
+x4=np.random.normal(3,0.5,500)
+y4=np.random.normal(3,0.5,500)
+#MAKE GROUP CLASS  #USE A SMALL TRICK
+c1=np.random.normal(1,0,500)
+c2=np.random.normal(2,0,500)
+c3=np.random.normal(3,0,500)
+c4=np.random.normal(4,0,500)
+#COMBINE X,Y
+G1=np.vstack((x1,y1)).T
+G2=np.vstack((x2,y2)).T
+G3=np.vstack((x3,y3)).T
+G4=np.vstack((x4,y4)).T
+
+#Concatenate ALL GROUPS
+c=np.concatenate((c1,c2,c3,c4))
+G=np.concatenate((G1,G2,G3,G4))
+
+G_train,G_test,c_train,c_test=train_test_split(G,c,test_size=0.3,random_state=8)
+plt.scatter(G[:,0],G[:,1],c=c)
+
+#print(G1)
+gnb=GaussianNB()
+gnb.fit(G_train,c_train)
+print('{:.3f}'.format(gnb.score(G_train,c_train)))
+
+z1=gnb.predict([[1.5,0.7]])
+z2=gnb.predict([[2.1,6.1]])
+z3=gnb.predict([[6.5,7.3]])
+z4=gnb.predict([[3.2,3.3]])
+print("[1.5,0.7]属于类别：",z1)
+print("[2.1,6.1]属于类别：",z2)
+print("[6.5,7.3]属于类别：",z3)
+print("[3.2,3.3]属于类别：",z4)
+
+c_test_predict=gnb.predict(G_test)
+#print(c_test_predict)
+#print(c_test)
+C2=confusion_matrix(c_test,c_test_predict,labels=[1,2,3,4])
+print("混淆矩阵如下：")
+print(C2)
+
+plt.show()
+
