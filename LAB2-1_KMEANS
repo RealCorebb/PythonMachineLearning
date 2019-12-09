@@ -1,0 +1,28 @@
+from mpl_toolkits.mplot3d import Axes3D
+from sklearn.datasets import make_blobs
+from sklearn.cluster import KMeans
+import matplotlib.pyplot as plt
+samples_num=500
+fig = plt.figure(1)
+fig2 = plt.figure(2)
+ax = fig.add_subplot(111, projection='3d')
+ax.set_xlabel('X Label')
+ax.set_ylabel('Y Label')
+ax.set_zlabel('Z Label')
+
+ax2= fig2.add_subplot(111, projection='3d')
+
+blobs = make_blobs (n_samples=samples_num*3,cluster_std=2,centers=3,n_features=3)
+X_blobs=blobs[0]
+kmeans = KMeans(n_clusters=3) #3 kinds
+kmeans.fit(X_blobs)
+predict=kmeans.predict(X_blobs)
+print(predict)
+print("类中心坐标")
+print(kmeans.cluster_centers_)
+print("每个类样本点数量")
+print(samples_num)
+
+ax.scatter(X_blobs[:,0],X_blobs[:,1],X_blobs[:,2],c=blobs[1])
+ax2.scatter(X_blobs[:,0],X_blobs[:,1],X_blobs[:,2],c=predict)
+plt.show()
